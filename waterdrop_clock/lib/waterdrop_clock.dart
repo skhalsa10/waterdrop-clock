@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'color-elem.dart';
+import 'water-drop.dart';
 
 final _lightTheme = {
   ThemeElement.background: Color.fromARGB(255, 133, 133, 133),
@@ -80,17 +81,13 @@ class _WaterDropClockState extends State<WaterDropClock> {
             Duration(milliseconds: _dateTime.millisecond),
         _updateTime,
       );
-      // Update once per second, but make sure to do it at the beginning of each
-      // new second, so that the clock is accurate.
-      // _timer = Timer(
-      //   Duration(seconds: 1) - Duration(milliseconds: _dateTime.millisecond),
-      //   _updateTime,
-      // );
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    RenderBox box = context.findRenderObject();
+    print("${box.size.height}");
     final colors = Theme.of(context).brightness == Brightness.light
         ? _lightTheme
         : _darkTheme;
@@ -112,19 +109,21 @@ class _WaterDropClockState extends State<WaterDropClock> {
       ],
     );
 
-    return Container(
-      color: colors[ThemeElement.background],
-      child: Center(
-        child: DefaultTextStyle(
-          style: defaultStyle,
-          child: Stack(
-            children: <Widget>[
-              Positioned(left: offset, top: 0, child: Text(hour)),
-              Positioned(right: offset, bottom: offset, child: Text(minute)),
-            ],
-          ),
-        ),
-      ),
-    );
+    return WaterDrop(box.size, 2, colors);
+//    return Container(
+//      color: colors[ThemeElement.background],
+//      child: Center(
+//        child: DefaultTextStyle(
+//          style: defaultStyle,
+//          child: Stack(
+//            children: <Widget>[
+//
+//              Positioned(left: offset, top: 0, child: Text(hour)),
+//              Positioned(right: offset, bottom: offset, child: Text(minute)),
+//            ],
+//          ),
+//        ),
+//      ),
+//    );
   }
 }

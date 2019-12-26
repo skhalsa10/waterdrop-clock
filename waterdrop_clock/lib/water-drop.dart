@@ -21,15 +21,15 @@ class WaterDrop extends StatefulWidget {
   final int _scale;
   final Map<ThemeElement, Color> _theme;
 
-  WaterDrop(Size _size, this._scale, this._theme) {
+  WaterDrop(this._size, this._scale, this._theme) {
     //we want landscape this will fix the bug where the mediaquery.of
     // gets the portrait size.
     //TODO I should pull this out of the widget
-    if (_size.height > _size.width) {
-      this._size = Size(_size.height, _size.width);
-    } else {
-      this._size = _size;
-    }
+//    if (_size.height > _size.width) {
+//      this._size = Size(_size.height, _size.width);
+//    } else {
+//      this._size = _size;
+//    }
   }
 
   @override
