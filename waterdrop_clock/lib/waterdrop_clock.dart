@@ -23,9 +23,8 @@ final _darkTheme = {
   ThemeElement.shadow: Color.fromARGB(100, 133, 133, 133),
 };
 
-/// A basic digital clock.
-///
-/// You can do better than this!
+/// I have made a Water drop clock it will display the time with a cool
+/// water drop animation.
 class WaterDropClock extends StatefulWidget {
   const WaterDropClock(this.model);
 
@@ -107,41 +106,30 @@ class _WaterDropClockState extends State<WaterDropClock> {
       ],
     );
 
-//    return LayoutBuilder(
-//        builder: (BuildContext context, BoxConstraints constraints) {
-//      return WaterDrop(
-//        Size(
-//          constraints.maxWidth,
-//          constraints.maxHeight,
-//        ),
-//        2,
-//        colors,
-//      );
-//    });
     return Container(
-        //color: colors[ThemeElement.background],
+        color: colors[ThemeElement.shadow],
         child: Stack(
-      children: <Widget>[
-        LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-          return WaterDrop(
-            Size(
-              constraints.maxWidth,
-              constraints.maxHeight,
-            ),
-            2,
-            colors,
-          );
-        }),
-        Positioned(
-            left: 14,
-            top: 0,
-            child: Text(
-              hour,
-              style: TextStyle(color: Colors.blue),
-            ))
-      ],
-    )
+          children: <Widget>[
+            LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+              return WaterDrop(
+                Size(
+                  constraints.maxWidth,
+                  constraints.maxHeight,
+                ),
+                2,
+                colors,
+              );
+            }),
+            Positioned(
+                left: 14,
+                top: 0,
+                child: Text(
+                  hour,
+                  style: TextStyle(color: Colors.blue),
+                ))
+          ],
+        )
 //      Center(
 //        child:
 //        DefaultTextStyle(

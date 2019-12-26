@@ -64,8 +64,12 @@ class _WaterDropState extends State<WaterDrop> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: CustomPaint(
-        painter: WaterDropPainter(_repaintPlease, _ledge, widget._theme),
+      child: ClipRect(
+        child: CustomPaint(
+          size: _size,
+          isComplex: true,
+          painter: WaterDropPainter(_repaintPlease, _ledge, widget._theme),
+        ),
       ),
     );
   }

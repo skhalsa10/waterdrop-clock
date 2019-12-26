@@ -21,13 +21,13 @@ class WaterDropPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    //print(_ledge.length);
     Paint paint = Paint()
       ..isAntiAlias = true
       ..style = PaintingStyle.fill
       ..color = _theme[ThemeElement.background]
       ..strokeWidth = 5.0;
-    //canvas.drawRect(Rect.fromLTWH(.0, 0.0, size.width, size.height), paint);
+    //print("the background I am printing is ${paint.color}");
+    //canvas.drawRect(Rect.fromLTWH(0.0, 0.0, size.width, size.height), paint);
     canvas.drawPaint(paint);
     //change the color to be not the background
     paint.color = _theme[ThemeElement.text];
