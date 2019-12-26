@@ -92,56 +92,44 @@ class _WaterDropClockState extends State<WaterDropClock> {
         DateFormat(widget.model.is24HourFormat ? 'HH' : 'hh').format(_dateTime);
     final minute = DateFormat('mm').format(_dateTime);
     final fontSize = MediaQuery.of(context).size.width / 3.5;
-    final offset = -fontSize / 7;
     final defaultStyle = TextStyle(
       color: colors[ThemeElement.text],
-      fontFamily: 'PressStart2P',
+      fontFamily: 'Josefin Sans',
       fontSize: fontSize,
-      shadows: [
-        Shadow(
-          blurRadius: 0,
-          color: colors[ThemeElement.shadow],
-          offset: Offset(10, 0),
-        ),
-      ],
     );
 
     return Container(
-        color: colors[ThemeElement.shadow],
-        child: Stack(
-          children: <Widget>[
-            LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
-              return WaterDrop(
-                Size(
-                  constraints.maxWidth,
-                  constraints.maxHeight,
+      color: colors[ThemeElement.shadow],
+      child: DefaultTextStyle(
+        style: defaultStyle,
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            return Stack(
+              children: <Widget>[
+                LayoutBuilder(builder:
+                    (BuildContext context, BoxConstraints constraints) {
+                  return WaterDrop(
+                    Size(
+                      constraints.maxWidth,
+                      constraints.maxHeight,
+                    ),
+                    2,
+                    colors,
+                  );
+                }),
+                Align(
+                  alignment: Alignment(-.75, 0),
+                  child: Text(hour),
                 ),
-                2,
-                colors,
-              );
-            }),
-            Positioned(
-                left: 14,
-                top: 0,
-                child: Text(
-                  hour,
-                  style: TextStyle(color: Colors.blue),
-                ))
-          ],
-        )
-//      Center(
-//        child:
-//        DefaultTextStyle(
-//          style: defaultStyle,
-//          child: Stack(
-//            children: <Widget>[
-//              Positioned(left: offset, top: 0, child: Text(hour)),
-//              Positioned(right: offset, bottom: offset, child: Text(minute)),
-//            ],
-//          ),
-//        ),
-//      ),
-        );
+                Align(
+                  alignment: Alignment(.75, 0),
+                  child: Text(minute),
+                )
+              ],
+            );
+          },
+        ),
+      ),
+    );
   }
 }
