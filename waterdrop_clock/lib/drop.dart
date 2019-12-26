@@ -40,8 +40,7 @@ class Drop implements Water {
   void render(Canvas canvas, Paint paint) {
     paint = paint
       ..isAntiAlias = true
-      ..style = PaintingStyle.fill
-      ..color = Color.fromARGB(255, 0, 0, 0);
+      ..style = PaintingStyle.fill;
 
     if (_waterRenderState == 0) {
       return;

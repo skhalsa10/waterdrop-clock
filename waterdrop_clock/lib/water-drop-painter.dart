@@ -1,6 +1,7 @@
 // Copyright 2019 Siri Khalsa (github: skhalsa10).
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app_again/color-elem.dart';
 
 //I will be rendoring these hopefully
 import 'water.dart';
@@ -10,11 +11,11 @@ import 'water.dart';
 //here I will pass in a boolean that will be switched from outside of this painter
 // in a set state
 class WaterDropPainter extends CustomPainter {
+  WaterDropPainter(this._repaint, this._ledge, this._theme);
   bool _repaint;
   List<Water> _ledge;
   bool please = false;
-
-  WaterDropPainter(this._repaint, this._ledge);
+  final Map<ThemeElement, Color> _theme;
 
   bool get repaint => _repaint;
 
@@ -24,9 +25,12 @@ class WaterDropPainter extends CustomPainter {
     Paint paint = Paint()
       ..isAntiAlias = true
       ..style = PaintingStyle.fill
-      ..color = Color.fromARGB(255, 133, 133, 133)
+      ..color = _theme[ThemeElement.background]
       ..strokeWidth = 5.0;
-    canvas.drawRect(Rect.fromLTWH(.0, 0.0, size.width, size.height), paint);
+    //canvas.drawRect(Rect.fromLTWH(.0, 0.0, size.width, size.height), paint);
+    canvas.drawPaint(paint);
+    //change the color to be not the background
+    paint.color = _theme[ThemeElement.text];
     for (Water w in _ledge) {
       w.render(canvas, paint);
     }
@@ -36,11 +40,8 @@ class WaterDropPainter extends CustomPainter {
   bool shouldRepaint(WaterDropPainter oldDelegate) {
     //lets just return true for now
     if (oldDelegate._repaint != _repaint) {
-      //print("oldDelegate._repaint is ${oldDelegate._repaint}");
-      //print("_repaint is ${_repaint}");
       return true;
     }
-    print("should paint will be False");
     return false;
   }
 }

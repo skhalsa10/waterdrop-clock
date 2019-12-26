@@ -65,8 +65,8 @@ class Splash implements Water {
     //do I even need the assignment operator?
     paint = paint
       ..isAntiAlias = true
-      ..style = PaintingStyle.fill
-      ..color = Color.fromARGB(255, 0, 0, 0);
+      ..style = PaintingStyle.fill;
+
     double w = 1.0 * _scale;
     double h = 1.0 * _scale;
     canvas.drawOval(Rect.fromLTWH(_x1, _y1 - (h / 2), w, h), paint);

@@ -36,7 +36,7 @@ class WaterDropClock extends StatefulWidget {
 }
 
 class _WaterDropClockState extends State<WaterDropClock> {
-  DateTime _dateTime = DateTime.now();
+  DateTime _dateTime;
   Timer _timer;
 
   @override
@@ -86,8 +86,6 @@ class _WaterDropClockState extends State<WaterDropClock> {
 
   @override
   Widget build(BuildContext context) {
-    RenderBox box = context.findRenderObject();
-    print("${box.size.height}");
     final colors = Theme.of(context).brightness == Brightness.light
         ? _lightTheme
         : _darkTheme;
@@ -109,21 +107,53 @@ class _WaterDropClockState extends State<WaterDropClock> {
       ],
     );
 
-    return WaterDrop(box.size, 2, colors);
-//    return Container(
-//      color: colors[ThemeElement.background],
-//      child: Center(
-//        child: DefaultTextStyle(
+//    return LayoutBuilder(
+//        builder: (BuildContext context, BoxConstraints constraints) {
+//      return WaterDrop(
+//        Size(
+//          constraints.maxWidth,
+//          constraints.maxHeight,
+//        ),
+//        2,
+//        colors,
+//      );
+//    });
+    return Container(
+        //color: colors[ThemeElement.background],
+        child: Stack(
+      children: <Widget>[
+        LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+          return WaterDrop(
+            Size(
+              constraints.maxWidth,
+              constraints.maxHeight,
+            ),
+            2,
+            colors,
+          );
+        }),
+        Positioned(
+            left: 14,
+            top: 0,
+            child: Text(
+              hour,
+              style: TextStyle(color: Colors.blue),
+            ))
+      ],
+    )
+//      Center(
+//        child:
+//        DefaultTextStyle(
 //          style: defaultStyle,
 //          child: Stack(
 //            children: <Widget>[
-//
 //              Positioned(left: offset, top: 0, child: Text(hour)),
 //              Positioned(right: offset, bottom: offset, child: Text(minute)),
 //            ],
 //          ),
 //        ),
 //      ),
-//    );
+        );
   }
 }

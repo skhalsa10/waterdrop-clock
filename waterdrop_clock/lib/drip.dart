@@ -28,8 +28,7 @@ class Drip implements Water {
   void render(Canvas canvas, Paint paint) {
     paint = paint
       ..isAntiAlias = true
-      ..style = PaintingStyle.fill
-      ..color = Color.fromARGB(255, 0, 0, 0);
+      ..style = PaintingStyle.fill;
 
     canvas.drawOval(Rect.fromLTWH(_x, _y, 3.0 * _scale, 3.0 * _scale), paint);
     double xoffset1 = (3.0 * _scale) / 8;

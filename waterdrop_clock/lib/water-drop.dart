@@ -14,36 +14,29 @@ import 'splash.dart';
 
 /// The WaterDropClock merges the WaterDrop animation with a clock
 /// it will take a size and a scale.
+/// To use this class property you must wrap in in a LayoutBuilder to obtain the
+/// Size that it will be using. Feed it the max height and Max Width
 /// it will use a CustomPaint to paint the animation to.
 /// it will also center a digital clock
 class WaterDrop extends StatefulWidget {
-  Size _size;
+  final Size _size;
   final int _scale;
   final Map<ThemeElement, Color> _theme;
 
-  WaterDrop(this._size, this._scale, this._theme) {
-    //we want landscape this will fix the bug where the mediaquery.of
-    // gets the portrait size.
-    //TODO I should pull this out of the widget
-//    if (_size.height > _size.width) {
-//      this._size = Size(_size.height, _size.width);
-//    } else {
-//      this._size = _size;
-//    }
-  }
+  WaterDrop(this._size, this._scale, this._theme);
 
   @override
   State<WaterDrop> createState() => _WaterDropState(_size, _scale);
 }
 
 class _WaterDropState extends State<WaterDrop> {
-  _WaterDropState(this.size, this._scale);
+  _WaterDropState(this._size, this._scale);
 
   //this list is used to keep track of the water  as
   // it converts through the three states.
   List<Water> _ledge;
   bool _repaintPlease;
-  Size size;
+  Size _size;
 
   int _scale;
   Ticker _ticker;
@@ -54,14 +47,14 @@ class _WaterDropState extends State<WaterDrop> {
     super.initState();
     _rand = Random();
     _repaintPlease = false;
-    _ledge = List((size.width / (8 * _scale)).floor());
+    _ledge = List((_size.width / (8 * _scale)).floor());
     //we want to step through state every Tick
     _ticker = Ticker(_onTick);
 
     //initialize the list of water with empty Drops
     for (int i = 0; i < _ledge.length; i++) {
       _ledge[i] =
-          Drop(((i * 8 * _scale) + ((size.width % (8 * _scale)) / 2)), _scale);
+          Drop(((i * 8 * _scale) + ((_size.width % (8 * _scale)) / 2)), _scale);
     }
 
     //lets start the ticket
@@ -72,7 +65,7 @@ class _WaterDropState extends State<WaterDrop> {
   Widget build(BuildContext context) {
     return Container(
       child: CustomPaint(
-        painter: WaterDropPainter(_repaintPlease, _ledge),
+        painter: WaterDropPainter(_repaintPlease, _ledge, widget._theme),
       ),
     );
   }
@@ -100,7 +93,7 @@ class _WaterDropState extends State<WaterDrop> {
       if (_ledge.elementAt(i).runtimeType == Drip) {
         Drip drip = _ledge.elementAt(i);
         if (drip.hasHitBottom) {
-          _ledge[i] = Splash(drip.x, size.height, _scale);
+          _ledge[i] = Splash(drip.x, _size.height, _scale);
         }
       }
       //Change  the Splashes back to Drops
@@ -108,7 +101,7 @@ class _WaterDropState extends State<WaterDrop> {
         Splash splash = _ledge.elementAt(i);
         if (splash.isComplete()) {
           _ledge[i] = Drop(
-              (i * 8 * _scale) + ((size.height % (8 * _scale)) / 2), _scale);
+              (i * 8 * _scale) + ((_size.height % (8 * _scale)) / 2), _scale);
         }
       }
     }
@@ -123,7 +116,7 @@ class _WaterDropState extends State<WaterDrop> {
       Drop drop = _ledge.elementAt(i);
       //randomly add water one at a time
       if (drop.addWater()) {
-        _ledge[i] = Drip(drop.x + (8 * _scale) / 2, _scale, size.height);
+        _ledge[i] = Drip(drop.x + (8 * _scale) / 2, _scale, _size.height);
       }
     }
   }
