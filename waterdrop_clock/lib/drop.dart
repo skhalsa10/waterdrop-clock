@@ -1,3 +1,5 @@
+// Copyright 2019 Siri Khalsa (github: skhalsa10).
+
 import 'dart:ui';
 import 'package:flutter/rendering.dart';
 import 'water.dart';

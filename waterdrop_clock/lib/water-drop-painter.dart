@@ -1,3 +1,5 @@
+// Copyright 2019 Siri Khalsa (github: skhalsa10).
+
 import 'package:flutter/material.dart';
 
 //I will be rendoring these hopefully

@@ -6,6 +6,7 @@ void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,8 +33,6 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     SystemChrome.setPreferredOrientations([
-      //DeviceOrientation.portraitUp,
-      //DeviceOrientation.portraitDown,
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
     ]);
@@ -41,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return WaterDrop(MediaQuery.of(context).size, 4);
+    return WaterDropClock(MediaQuery.of(context).size, 4);
   }
 
   @override

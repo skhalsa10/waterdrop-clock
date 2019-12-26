@@ -1,3 +1,5 @@
+// Copyright 2019 Siri Khalsa (github: skhalsa10).
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -9,54 +11,61 @@ import 'drip.dart';
 import 'drop.dart';
 import 'splash.dart';
 
-//okay let me try this again
-class WaterDrop extends StatefulWidget {
+/// The WaterDropClock merges the WaterDrop animation with a clock
+/// it will take a size and a scale.
+/// it will use a CustomPaint to paint the animation to.
+/// it will also center a digital clock
+class WaterDropClock extends StatefulWidget {
   Size _size;
-  int _scale;
+  final int _scale;
 
-  WaterDrop(this._size, this._scale);
+  WaterDropClock(Size _size, this._scale) {
+    //we want landscape this will fix the bug where the mediaquery.of
+    // gets the portrait size.
+    //TODO I should pull this out of the widget
+    if (_size.height > _size.width) {
+      this._size = Size(_size.height, _size.width);
+    } else {
+      this._size = _size;
+    }
+  }
 
   @override
-  State<WaterDrop> createState() => WaterDropState(_size, _scale);
+  State<WaterDropClock> createState() => _WaterDropClockState(_size, _scale);
 }
 
-//Okay I have spent countless hours attempting to find what I want for animation
-//I want a traditional game loop type animation. I want something that doesnt end.
-//this may unfortunately be inefficient in Flutter because it is not just repainting
-//a canvas like in what I am used to. I still found a stable way to do it!
-//at forst I tried a Timer that initiated changes every 16.7 ms but it was just not very consistent
-//I attempted to use the animation<double> and an AnimationController
-//while I never got far enought to test it felt wrong
-//during my research I foudn that the animation Timer utilizes a Ticker.
-//A ticket ticks on every frame. I WANT THIS.
-//I have added it and I am getting consistent ticks at 16.7 60 frames a second.
-class WaterDropState extends State<WaterDrop> {
+class _WaterDropClockState extends State<WaterDropClock> {
+  _WaterDropClockState(this.size, this._scale);
+
+  //this list is used to keep track of the water  as
+  // it converts through the three states.
   List<Water> _ledge;
   bool _repaintPlease;
-  //Timer timer;
   Size size;
 
   int _scale;
-  Ticker ticker;
+  Ticker _ticker;
   Random _rand;
-
-  WaterDropState(this.size, this._scale);
+  DateTime _dateTime;
 
   @override
   void initState() {
     super.initState();
-    //size = MediaQuery.of(context).size;
+    _dateTime = DateTime.now();
     _rand = Random();
     _repaintPlease = false;
     _ledge = List((size.width / (8 * _scale)).floor());
-    ticker = Ticker(_onTick);
-    ticker.start();
-    //timer = Timer.periodic(Duration(milliseconds: 17), callback);
+    //we want to step through state every Tick
+    _ticker = Ticker(_onTick);
+
     //initialize the list of water with empty Drops
     for (int i = 0; i < _ledge.length; i++) {
       _ledge[i] =
           Drop(((i * 8 * _scale) + ((size.width % (8 * _scale)) / 2)), _scale);
     }
+
+    //lets start the ticket
+    _ticker.start();
   }
 
   @override
@@ -64,31 +73,27 @@ class WaterDropState extends State<WaterDrop> {
     return Container(
       child: CustomPaint(
         painter: WaterDropPainter(_repaintPlease, _ledge),
-        child: Center(
-          child: Text(
-            "CLOCK",
-            style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-          ),
-        ),
       ),
     );
   }
 
+  //this animation in this widget will need
+  // to update every tick and paint very tick
   void _onTick(Duration elapsed) {
-    //print(elapsed.inMilliseconds);
+    //lets step the state
     addWater();
+    //paint the updated state
     setState(() {
       _repaintPlease = !_repaintPlease;
     });
+    //update state that does not need to be painted
     update();
   }
 
+  //after the ledge has been painted we need to go through this and convert
+  //Drips to Splashes and Splashes to Drops if needed
   void update() {
     int ledgeLength = _ledge.length;
-    //this will update the ledge after a render and change water types
-    //since the loop that calls this iterates over everything change the type as needed
-    //add water converts Drops to Drips. this will convert
-    // Drips to Splashes and Splashes to Drops
 
     for (int i = 0; i < ledgeLength; i++) {
       //change Drip to Splash
@@ -109,11 +114,11 @@ class WaterDropState extends State<WaterDrop> {
     }
   }
 
+  // This function will pick a random spot in the ledge array and add water to it
   void addWater() {
-    //there are three types of updates needed one for Drop , Drip, and Splash;
     int i = _rand.nextInt(_ledge.length);
 
-    //add water to Drop and change to a drip if needed
+    //add water to Drop (only drops though) and change to a drip if needed
     if (_ledge.elementAt(i).runtimeType == Drop) {
       Drop drop = _ledge.elementAt(i);
       //randomly add water one at a time
@@ -125,7 +130,7 @@ class WaterDropState extends State<WaterDrop> {
 
   @override
   void dispose() {
-    ticker.dispose();
+    _ticker.dispose();
     super.dispose();
   }
 }
