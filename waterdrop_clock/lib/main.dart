@@ -1,56 +1,26 @@
+// Copyright 2019 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+import 'dart:io';
+
+import 'package:flutter_app_again/waterdrop_clock.dart';
+import 'package:flutter_clock_helper/customizer.dart';
+import 'package:flutter_clock_helper/model.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_app_again/water-drop.dart';
 
-void main() => runApp(MyApp());
+import 'waterdrop_clock.dart';
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
-      home: MyHomePage(title: 'Flutter Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  void initState() {
-    super.initState();
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
-      DeviceOrientation.landscapeLeft,
-    ]);
+void main() {
+  // A temporary measure until Platform supports web and TargetPlatform supports
+  // macOS.
+  if (!kIsWeb && Platform.isMacOS) {
+    // TODO(gspencergoog): Update this when TargetPlatform includes macOS.
+    // https://github.com/flutter/flutter/issues/31366
+    // See https://github.com/flutter/flutter/wiki/Desktop-shells#target-platform-override.
+    debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return WaterDropClock(MediaQuery.of(context).size, 4);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-  }
+  runApp(ClockCustomizer((ClockModel model) => WaterDropClock(model)));
 }

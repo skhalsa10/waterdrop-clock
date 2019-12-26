@@ -7,6 +7,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_app_again/water-drop-painter.dart';
 import 'package:flutter_app_again/water.dart';
 
+import 'color-elem.dart';
 import 'drip.dart';
 import 'drop.dart';
 import 'splash.dart';
@@ -15,11 +16,12 @@ import 'splash.dart';
 /// it will take a size and a scale.
 /// it will use a CustomPaint to paint the animation to.
 /// it will also center a digital clock
-class WaterDropClock extends StatefulWidget {
+class WaterDrop extends StatefulWidget {
   Size _size;
   final int _scale;
+  final Map<ThemeElement, Color> _theme;
 
-  WaterDropClock(Size _size, this._scale) {
+  WaterDrop(Size _size, this._scale, this._theme) {
     //we want landscape this will fix the bug where the mediaquery.of
     // gets the portrait size.
     //TODO I should pull this out of the widget
@@ -31,11 +33,11 @@ class WaterDropClock extends StatefulWidget {
   }
 
   @override
-  State<WaterDropClock> createState() => _WaterDropClockState(_size, _scale);
+  State<WaterDrop> createState() => _WaterDropState(_size, _scale);
 }
 
-class _WaterDropClockState extends State<WaterDropClock> {
-  _WaterDropClockState(this.size, this._scale);
+class _WaterDropState extends State<WaterDrop> {
+  _WaterDropState(this.size, this._scale);
 
   //this list is used to keep track of the water  as
   // it converts through the three states.
@@ -46,12 +48,10 @@ class _WaterDropClockState extends State<WaterDropClock> {
   int _scale;
   Ticker _ticker;
   Random _rand;
-  DateTime _dateTime;
 
   @override
   void initState() {
     super.initState();
-    _dateTime = DateTime.now();
     _rand = Random();
     _repaintPlease = false;
     _ledge = List((size.width / (8 * _scale)).floor());
