@@ -17,7 +17,6 @@ import 'splash.dart';
 /// To use this class property you must wrap in in a LayoutBuilder to obtain the
 /// Size that it will be using. Feed it the max height and Max Width
 /// it will use a CustomPaint to paint the animation to.
-/// it will also center a digital clock
 class WaterDrop extends StatefulWidget {
   final Size _size;
   final int _scale;
@@ -48,7 +47,9 @@ class _WaterDropState extends State<WaterDrop> {
     _rand = Random();
     _repaintPlease = false;
     _ledge = List((_size.width / (8 * _scale)).floor());
-    //we want to step through state every Tick
+    //we want to step through state every Tick this is the magic for
+    // making an endless animation. I could not figure out how to make an endless
+    //animation with the Animation related built in widgets.
     _ticker = Ticker(_onTick);
 
     //initialize the list of water with empty Drops

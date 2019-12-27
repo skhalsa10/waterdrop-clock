@@ -1,6 +1,4 @@
-// Copyright 2019 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+// Copyright 2019 Siri Khalsa
 
 import 'dart:async';
 
@@ -24,7 +22,10 @@ final _darkTheme = {
 };
 
 /// I have made a Water drop clock it will display the time with a cool
-/// water drop animation.
+/// water drop animation. I have borrowed alot from the example digital clock
+/// example handed out by the flutter team.
+/// Version1 the drops do not interact with the time
+/// Version2 attempt to splash after it hits the time
 class WaterDropClock extends StatefulWidget {
   const WaterDropClock(this.model);
 
@@ -72,8 +73,7 @@ class _WaterDropClockState extends State<WaterDropClock> {
   void _updateTime() {
     setState(() {
       _dateTime = DateTime.now();
-      // Update once per minute. If you want to update every second, use the
-      // following code.
+
       _timer = Timer(
         Duration(minutes: 1) -
             Duration(seconds: _dateTime.second) -

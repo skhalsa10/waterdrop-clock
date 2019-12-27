@@ -3,13 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_again/color-elem.dart';
 
-//I will be rendoring these hopefully
 import 'water.dart';
 
-//why is this not working the way I want to! grr
-//take 2 from scratch
-//here I will pass in a boolean that will be switched from outside of this painter
-// in a set state
+/// the water drop painter must be used with the WaterDrop class.
+/// It will take in the array of water and render it on the canvas.
+/// It will use the map of theme colors set in the WaterDropClock
 class WaterDropPainter extends CustomPainter {
   WaterDropPainter(this._repaint, this._ledge, this._theme);
   bool _repaint;
@@ -26,8 +24,7 @@ class WaterDropPainter extends CustomPainter {
       ..style = PaintingStyle.fill
       ..color = _theme[ThemeElement.background]
       ..strokeWidth = 5.0;
-    //print("the background I am printing is ${paint.color}");
-    //canvas.drawRect(Rect.fromLTWH(0.0, 0.0, size.width, size.height), paint);
+    //this works great if the custompainter is wrapped in a ClipRect
     canvas.drawPaint(paint);
     //change the color to be not the background
     paint.color = _theme[ThemeElement.text];

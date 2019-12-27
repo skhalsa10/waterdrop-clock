@@ -14,7 +14,6 @@ class Splash implements Water {
   // I never see people using private variables in dart and flutter...
   // ... maybe I just have not seen enough code? I will mkae everything
   // private if I can... if only because I am used to that.
-  //TODO I made all the xs and ys doubles erase if it works
   double _x1;
   double _x2;
   double _x3;
