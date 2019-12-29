@@ -28,7 +28,6 @@ final _darkTheme = {
 /// Version2 attempt to splash after it hits the time
 class WaterDropClock extends StatefulWidget {
   const WaterDropClock(this.model);
-
   final ClockModel model;
 
   @override
@@ -38,6 +37,7 @@ class WaterDropClock extends StatefulWidget {
 class _WaterDropClockState extends State<WaterDropClock> {
   DateTime _dateTime;
   Timer _timer;
+  Size _sizeOfClock;
 
   @override
   void initState() {
@@ -91,7 +91,7 @@ class _WaterDropClockState extends State<WaterDropClock> {
     final hour =
         DateFormat(widget.model.is24HourFormat ? 'HH' : 'hh').format(_dateTime);
     final minute = DateFormat('mm').format(_dateTime);
-    final fontSize = MediaQuery.of(context).size.width / 3.5;
+    final fontSize = MediaQuery.of(context).size.width / 4.5;
     final defaultStyle = TextStyle(
       color: colors[ThemeElement.text],
       fontFamily: 'Josefin Sans',
@@ -108,21 +108,22 @@ class _WaterDropClockState extends State<WaterDropClock> {
               children: <Widget>[
                 LayoutBuilder(builder:
                     (BuildContext context, BoxConstraints constraints) {
+                  _sizeOfClock = Size(
+                    constraints.maxWidth,
+                    constraints.maxHeight,
+                  );
                   return WaterDrop(
-                    Size(
-                      constraints.maxWidth,
-                      constraints.maxHeight,
-                    ),
+                    _sizeOfClock,
                     2,
                     colors,
                   );
                 }),
                 Align(
-                  alignment: Alignment(-.75, 0),
+                  alignment: Alignment(-.85, 0),
                   child: Text(hour),
                 ),
                 Align(
-                  alignment: Alignment(.75, 0),
+                  alignment: Alignment(.85, 0),
                   child: Text(minute),
                 )
               ],

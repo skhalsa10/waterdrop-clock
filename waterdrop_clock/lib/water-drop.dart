@@ -25,7 +25,8 @@ class WaterDrop extends StatefulWidget {
   WaterDrop(this._size, this._scale, this._theme);
 
   @override
-  State<WaterDrop> createState() => _WaterDropState(_size, _scale);
+  State<WaterDrop> createState() =>
+      _WaterDropState(Size(_size.width, _size.height), _scale);
 }
 
 class _WaterDropState extends State<WaterDrop> {
@@ -64,6 +65,9 @@ class _WaterDropState extends State<WaterDrop> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget._size != _size) {
+      rebuildLedge();
+    }
     return Container(
       child: ClipRect(
         child: CustomPaint(
@@ -130,5 +134,14 @@ class _WaterDropState extends State<WaterDrop> {
   void dispose() {
     _ticker.dispose();
     super.dispose();
+  }
+
+  void rebuildLedge() {
+    this._size = widget._size;
+    _ledge = List((_size.width / (8 * _scale)).floor());
+    for (int i = 0; i < _ledge.length; i++) {
+      _ledge[i] =
+          Drop(((i * 8 * _scale) + ((_size.width % (8 * _scale)) / 2)), _scale);
+    }
   }
 }
