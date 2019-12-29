@@ -85,6 +85,8 @@ class _WaterDropClockState extends State<WaterDropClock> {
 
   @override
   Widget build(BuildContext context) {
+    Orientation currentOrientation = MediaQuery.of(context).orientation;
+    print(currentOrientation);
     final colors = Theme.of(context).brightness == Brightness.light
         ? _lightTheme
         : _darkTheme;
@@ -108,6 +110,8 @@ class _WaterDropClockState extends State<WaterDropClock> {
               children: <Widget>[
                 LayoutBuilder(builder:
                     (BuildContext context, BoxConstraints constraints) {
+                  print(MediaQuery.of(context).orientation);
+                  print(constraints.maxWidth);
                   return WaterDrop(
                     Size(
                       constraints.maxWidth,
@@ -115,16 +119,18 @@ class _WaterDropClockState extends State<WaterDropClock> {
                     ),
                     2,
                     colors,
+                    hour,
+                    minute,
                   );
                 }),
-                Align(
-                  alignment: Alignment(-.75, 0),
-                  child: Text(hour),
-                ),
-                Align(
-                  alignment: Alignment(.75, 0),
-                  child: Text(minute),
-                )
+//                Align(
+//                  alignment: Alignment(-.75, 0),
+//                  child: Text(hour),
+//                ),
+//                Align(
+//                  alignment: Alignment(.75, 0),
+//                  child: Text(minute),
+//                )
               ],
             );
           },

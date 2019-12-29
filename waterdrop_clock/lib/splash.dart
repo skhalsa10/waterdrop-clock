@@ -28,22 +28,23 @@ class Splash implements Water {
   int _counter;
   double _height;
   Random _rand;
+  int _counter2;
 
   ///
   /// I know there is a better way to contruct stuff in dart but I think I lose
   /// the ability to take advantage of this awesomeness due to my need to
   /// initialize many variables here
   ///
-  Splash(x, height, scale) {
+  Splash(x, y, height, scale) {
     _rand = Random();
     _x1 = x;
     _x2 = x;
     _x3 = x;
     _height = height;
     _scale = scale;
-    _y1 = height;
-    _y2 = height;
-    _y3 = height;
+    _y1 = y;
+    _y2 = y;
+    _y3 = y;
     //splashes to the left
     _vel1 = 1 + (6 * -_rand.nextDouble());
     //splashes verticle...ish
@@ -52,6 +53,7 @@ class Splash implements Water {
     _vel3 = 1 + (6 * _rand.nextDouble());
     _counter = 0;
     _frame = 10;
+    _counter2 = 0;
   }
 
   /// The splash will render as three circles that move in a random direction.
@@ -76,6 +78,11 @@ class Splash implements Water {
 
   ///This will update the location of each piece of the splash
   void _updateSplash() {
+    if (_frame < 0) {
+      _y1 += _counter2++;
+      _y2 += _counter2++;
+      _y3 += _counter2++;
+    }
     _updateSplash1();
     _updateSplash2();
     _updateSplash3();

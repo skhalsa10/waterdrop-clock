@@ -3,6 +3,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_app_again/water-drop-painter.dart';
 import 'package:flutter_app_again/water.dart';
@@ -22,7 +23,10 @@ class WaterDrop extends StatefulWidget {
   final int _scale;
   final Map<ThemeElement, Color> _theme;
 
-  WaterDrop(this._size, this._scale, this._theme);
+  final String _hour;
+  final String _minute;
+
+  WaterDrop(this._size, this._scale, this._theme, this._hour, this._minute);
 
   @override
   State<WaterDrop> createState() => _WaterDropState(_size, _scale);
@@ -40,11 +44,44 @@ class _WaterDropState extends State<WaterDrop> {
   int _scale;
   Ticker _ticker;
   Random _rand;
+  TextSpan _hourSpan;
+  TextSpan _minuteSpan;
+  TextPainter _hourPainter;
+  TextPainter _minutePainter;
 
   @override
   void initState() {
     super.initState();
     _rand = Random();
+
+    final fontSize = _size.width / 3.5;
+    final TextStyle defaultStyle = TextStyle(
+      color: widget._theme[ThemeElement.text],
+      fontFamily: 'Josefin Sans',
+      fontSize: fontSize,
+    );
+    _hourSpan = TextSpan(
+      text: widget._hour,
+      style: defaultStyle,
+    );
+    _hourPainter = TextPainter(
+      text: _hourSpan,
+      textDirection: TextDirection.ltr,
+      maxLines: 1,
+      textAlign: TextAlign.right,
+    )..layout(maxWidth: _size.width / 2);
+
+    _minuteSpan = TextSpan(
+      text: widget._minute,
+      style: defaultStyle,
+    );
+    _minutePainter = TextPainter(
+      text: _minuteSpan,
+      textDirection: TextDirection.ltr,
+      maxLines: 1,
+      textAlign: TextAlign.left,
+    )..layout(maxWidth: _size.width / 2);
+
     _repaintPlease = false;
     _ledge = List((_size.width / (8 * _scale)).floor());
     //we want to step through state every Tick this is the magic for
@@ -69,7 +106,13 @@ class _WaterDropState extends State<WaterDrop> {
         child: CustomPaint(
           size: _size,
           isComplex: true,
-          painter: WaterDropPainter(_repaintPlease, _ledge, widget._theme),
+          painter: WaterDropPainter(
+            _repaintPlease,
+            _ledge,
+            widget._theme,
+            widget._hour,
+            widget._minute,
+          ),
         ),
       ),
     );
@@ -92,13 +135,23 @@ class _WaterDropState extends State<WaterDrop> {
   //Drips to Splashes and Splashes to Drops if needed
   void update() {
     int ledgeLength = _ledge.length;
+    _hourPainter.layout(maxWidth: _size.width / 2);
+    final lineMetrics = _hourPainter.computeLineMetrics();
+    double startHourX = (_size.width / 8);
+    double startHourY = (_size.height - _hourPainter.height) / 2;
 
     for (int i = 0; i < ledgeLength; i++) {
       //change Drip to Splash
       if (_ledge.elementAt(i).runtimeType == Drip) {
         Drip drip = _ledge.elementAt(i);
         if (drip.hasHitBottom) {
-          _ledge[i] = Splash(drip.x, _size.height, _scale);
+          _ledge[i] = Splash(drip.x, drip.y, _size.height, _scale);
+        }
+        //check if it hits the hour.
+        if (drip.x >= startHourX && drip.x <= startHourX + _hourPainter.width) {
+          if (drip.y > startHourY) {
+            _ledge[i] = Splash(drip.x, drip.y, _size.height, _scale);
+          }
         }
       }
       //Change  the Splashes back to Drops

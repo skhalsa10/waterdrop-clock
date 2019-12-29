@@ -23,6 +23,7 @@ class Drip implements Water {
   bool get hasHitBottom => _hasHitBottom;
 
   double get x => _x;
+  double get y => _y;
 
   @override
   void render(Canvas canvas, Paint paint) {
