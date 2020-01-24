@@ -17,3 +17,8 @@ here are some screenshots :)
 ![](waterdrop-clock2.jpg)
 ![](waterdrop-clock3.jpg)
 ![](waterdrop-clock4.jpg)
+
+
+What I should do next?
+1. build animation for all weather that can change accordingly
+2. build collision detection with the clock numbers themselves so the animation can interact with it.
